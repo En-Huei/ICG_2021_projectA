@@ -31,6 +31,7 @@ public class CarEntity : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        //linear diplacement control
         if (Input.GetKey(KeyCode.UpArrow))
         {
             m_Velocity = Mathf.Min(maxVelocity, m_Velocity + Time.fixedDeltaTime * acceleraion);
@@ -39,9 +40,13 @@ public class CarEntity : MonoBehaviour
         {
             m_Velocity = Mathf.Max(-0.5f* maxVelocity, m_Velocity - Time.fixedDeltaTime * deceleraion);
         }
-
+        if(Input.GetKey(KeyCode.Space))
+        {
+            //Break
+            m_Velocity = Mathf.Max(0, m_Velocity - Time.deltaTime * deceleration);
+        }
         m_DeltaMovement = m_Velocity * Time.fixedDeltaTime;
-
+        //z-axis rotation control
         if (Input.GetKey(KeyCode.LeftArrow))
         {
             m_FrontWheelAngle = Mathf.Clamp(
@@ -54,6 +59,7 @@ public class CarEntity : MonoBehaviour
                 m_FrontWheelAngle - Time.fixedDeltaTime * turnAngularVelocity, -WHEEL_ANGLE_LIMIT, WHEEL_ANGLE_LIMIT);
             UpdateWheel();
         }
+        //update position&rotation
         this.transform.Rotate(0f, 0f, 1 / CarLength * Mathf.Tan(Mathf.Deg2Rad * m_FrontWheelAngle) * Mathf.Rad2Deg * m_DeltaMovement);
         this.transform.Translate(Vector3.right * m_DeltaMovement);
     }
