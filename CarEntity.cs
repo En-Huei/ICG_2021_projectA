@@ -4,23 +4,22 @@ using UnityEngine;
 
 public class CarEntity : MonoBehaviour
 {
-    //hello
-    
     public GameObject wheelFR;
     public GameObject wheelFL;
     public GameObject wheelBL;
     public GameObject wheelBR;
     float m_FrontWheelAngle = 0;
-    const float WHEEL_ANGLE_LIMIT = 40f;
-    public float turnAngularVelocity = 20f;
+    const float WHEEL_ANGLE_LIMIT = 45f;
+    public float turnAngularVelocity = 15f;
 
     float m_Velocity;
-    public float acceleraion = 3f;
-    public float deceleraion = 10f;
-    public float maxVelocity = 60f;
+    public float acceleraion = 5f;
+    public float deceleraion = 6f;
+    public float maxVelocity = 50f;
     float m_DeltaMovement;
     float CarLength = 1f;
     [SerializeField] SpriteRenderer[] m_Renderers = new SpriteRenderer[5];
+    public CheckPoint ch;
 
     // Start is called before the first frame update
     void Start()
@@ -40,10 +39,9 @@ public class CarEntity : MonoBehaviour
         {
             m_Velocity = Mathf.Max(-0.5f* maxVelocity, m_Velocity - Time.fixedDeltaTime * deceleraion);
         }
-        if(Input.GetKey(KeyCode.Space))
+        if (Input.GetKey(KeyCode.Space))
         {
-            //Break
-            m_Velocity = Mathf.Max(0, m_Velocity - Time.deltaTime * deceleration);
+            m_Velocity = 0;
         }
         m_DeltaMovement = m_Velocity * Time.fixedDeltaTime;
         //z-axis rotation control
@@ -100,7 +98,7 @@ public class CarEntity : MonoBehaviour
     void OnTriggerEnter2D(Collider2D collision)
     {
         CheckPoint checkPoint = collision.gameObject.GetComponent<CheckPoint>();
-        if (checkPoint != null)
+        if (checkPoint ==ch)
         {
             ChangeColor(Color.green);
             this.Invoke("ResetColor", 0.9f);
